@@ -36,6 +36,10 @@ const App = () => {
       console.log("No authorized account found");
     }
     if (ethereum) setNetworkId(parseInt(ethereum.chainId, 16));
+    ethereum.on("chainChanged", (chainId) => {
+      console.log(chainId);
+      setNetworkId(parseInt(chainId, 16));
+    });
   };
 
   useEffect(() => {
