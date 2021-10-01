@@ -25,6 +25,7 @@ const App = () => {
     } else {
       console.log("We have the ethereum object", ethereum);
     }
+    getTotalNFTsMintedSoFar();
 
     const accounts = await ethereum.request({ method: "eth_accounts" });
 
@@ -44,7 +45,6 @@ const App = () => {
 
   useEffect(() => {
     checkIfWalletIsConnected();
-    getTotalNFTsMintedSoFar();
   }, []);
 
   const connectWallet = async () => {
