@@ -14,6 +14,7 @@ const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [networkId, setNetworkId] = useState();
   const [nftMinted, setNftMinted] = useState();
+  const [minting, setMinting] = useState(false);
 
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -79,7 +80,11 @@ const App = () => {
       disabled={networkId !== 4}
       className="cta-button connect-wallet-button"
     >
-      {networkId !== 4 ? "Wrong Network! Switch to Rinkeby." : "Mint NFT"}
+      {networkId !== 4
+        ? "Wrong Network! Switch to Rinkeby."
+        : minting
+        ? "Minting..."
+        : "Mint NFT"}
     </button>
   );
   const setupEventListener = async () => {
@@ -99,7 +104,7 @@ const App = () => {
 
         connectedContract.on("NewEpicNFTMinted", (from, tokenId) => {
           console.log(from, tokenId.toNumber());
-          setNftMinted(tokenId.toNumber());
+          setNftMinted(tokenId.toNumber() + 1);
           alert(
             `Hey there! We've minted your NFT and sent it to your wallet. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
           );
@@ -128,10 +133,13 @@ const App = () => {
 
         console.log("Going to pop wallet now to pay gas...");
         let nftTxn = await connectedContract.makeAnEpicNFT();
-
+        setMinting(true);
         console.log("Mining...please wait.");
         await nftTxn.wait();
-
+        setMinting(false);
+        alert(
+          `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
+        );
         console.log(
           `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
         );
