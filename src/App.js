@@ -1,6 +1,6 @@
 import "./styles/App.css";
 import twitterLogo from "./assets/twitter-logo.svg";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
 import myEpicNft from "./utils/MyEpicNFT.json";
 // Constants
@@ -16,7 +16,7 @@ const App = () => {
   const [nftMinted, setNftMinted] = useState();
   const [minting, setMinting] = useState(false);
 
-  const checkIfWalletIsConnected = async () => {
+  const checkIfWalletIsConnected = useCallback(async () => {
     const { ethereum } = window;
 
     if (!ethereum) {
@@ -26,6 +26,7 @@ const App = () => {
       console.log("We have the ethereum object", ethereum);
     }
     getTotalNFTsMintedSoFar();
+    setupEventListener();
 
     const accounts = await ethereum.request({ method: "eth_accounts" });
 
@@ -41,7 +42,7 @@ const App = () => {
       console.log(chainId);
       setNetworkId(parseInt(chainId, 16));
     });
-  };
+  }, []);
 
   useEffect(() => {
     checkIfWalletIsConnected();
@@ -62,8 +63,6 @@ const App = () => {
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
-
-      setupEventListener();
     } catch (error) {
       console.log(error);
     }
@@ -141,9 +140,6 @@ const App = () => {
         console.log("Mining...please wait.");
         await nftTxn.wait();
         setMinting(false);
-        alert(
-          `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
-        );
         console.log(
           `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
         );
