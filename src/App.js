@@ -189,7 +189,7 @@ const App = () => {
         <div className="footer-container">
           <a
             className="footer-text"
-            href={`https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}`}
+            href={`https://testnets.opensea.io/collection/jdsnft-uzyikzi55o`}
             target="_blank"
             rel="noreferrer"
           >{`🌊 View Collection on OpenSea`}</a>
