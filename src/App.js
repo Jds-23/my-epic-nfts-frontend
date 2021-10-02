@@ -45,7 +45,7 @@ const App = () => {
 
   useEffect(() => {
     checkIfWalletIsConnected();
-  }, []);
+  }, [checkIfWalletIsConnected]);
 
   const connectWallet = async () => {
     try {
